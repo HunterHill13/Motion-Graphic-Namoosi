@@ -5,7 +5,7 @@
 * **Date:** 2026-11-01
 * **Context Ingested:** `concepts_brief.md`
 * **Dedicated Agent Repository:** [`HunterHill13/Motion-Graphic-Agent`](https://github.com/HunterHill13/Motion-Graphic-Agent.git)
-* **Skill & Remotion Engine Repository:** [`HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan`](https://github.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan.git)
+* **Skill & Remotion Engine Repository:** [`HunterHill13/Motion-Graphic-Namoosi`](https://github.com/HunterHill13/Motion-Graphic-Namoosi.git)
 
 --------------------------------------------------------------------------------
 

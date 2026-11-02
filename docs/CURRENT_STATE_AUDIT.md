@@ -2,7 +2,7 @@
 
 **Audit Date:** 2026-10-04  
 **Auditor:** Senior AI Video Pipeline Architect & Lead Agent Engineer  
-**Repository:** `HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan`  
+**Repository:** `HunterHill13/Motion-Graphic-Namoosi`  
 **Current Git Commit:** `729add3` (Clean working tree on `main`)
 
 ---

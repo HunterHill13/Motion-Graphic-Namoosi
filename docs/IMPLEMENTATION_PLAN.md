@@ -74,4 +74,4 @@ gantt
 - **Step 4.2: Pilot Production Test**
   - Execute a test pilot run using the updated engine, verifying audio ducking, Living Motion frame deltas, and Persian narration.
 - **Step 4.3: Version Tagging & Remote Push**
-  - Commit all changes and push to `HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan`.
+  - Commit all changes and push to `HunterHill13/Motion-Graphic-Namoosi`.
