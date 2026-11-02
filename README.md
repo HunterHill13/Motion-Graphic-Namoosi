@@ -1,8 +1,8 @@
-# 🎬 موتور تولید موشن‌گرافیک سینمایی | AI Cinematic Motion Design Engine
+# 🎬 موتور تولید موشن‌گرافیک سینمایی ناموسی | Motion-Graphic-Namoosi
 ## کالیبراسیون جامع بر اساس بنچ‌مارک جهانی کلاد اوپوس ۵.۵ (`mg-styles-15`)
 
-[![Status](https://img.shields.io/badge/Production%20Status-CANONICAL%20BENCHMARK-00E5FF.svg?style=for-the-badge)](SKILL.md)
-[![Skill](https://img.shields.io/badge/Agent%20Skill-cinematic--motion--director-FF6600.svg?style=for-the-badge)](SKILL.md)
+[![Status](https://img.shields.io/badge/Production%20Status-CANONICAL%20BENCHMARK-00E5FF.svg?style=for-the-badge)](.agents/skills/Motion-Graphic-Namoosi/SKILL.md)
+[![Skill](https://img.shields.io/badge/Agent%20Skill-Motion--Graphic--Namoosi-FF6600.svg?style=for-the-badge)](.agents/skills/Motion-Graphic-Namoosi/SKILL.md)
 [![Renderer](https://img.shields.io/badge/Render%20Engine-Headless%20Chrome%20(GPU)-4285F4.svg?style=for-the-badge)](harness/render.mjs)
 [![Audio](https://img.shields.io/badge/Audio%20Engine-Procedural%20mgaudio%2048kHz-10B981.svg?style=for-the-badge)](lib/audio/)
 [![Rubric](https://img.shields.io/badge/Quality%20Gate-7--Dimension%20Rubric-8B5CF6.svg?style=for-the-badge)](resources/rubrics/motion-director-rubric.md)
