@@ -1,0 +1,25 @@
+project:
+  title: "Example Production"
+  fps: 30
+  total_duration_frames: 1800
+
+beats:
+  - id: "B01"
+    scene: 1
+    label: "Hook & Cellular Tension"
+    vo:
+      text: "Every second, a delicate balance keeps healthy tissues intact."
+      start_frame: 30
+      end_frame: 140
+    visual_goal: "Establish cellular landscape with dynamic metabolic equilibrium"
+    hero: "Living cellular membrane"
+    shot_type: "Macro Push In"
+    camera: "Push 1.00 -> 1.05"
+    motion: "Fluid bilayer motion with floating receptor nodes"
+    text_on_screen: "CELLULAR HOMEOSTASIS"
+    audio:
+      sfx: "sub_hum, microscopic_ping"
+      music_cue: "calm_ambient"
+    transition: "push-through"
+    source: "Alberts Molecular Biology of the Cell"
+    status: "approved"

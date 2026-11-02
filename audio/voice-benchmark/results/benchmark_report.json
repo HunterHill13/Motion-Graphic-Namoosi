@@ -1,0 +1,39 @@
+{
+  "benchmark_date": "2026-10-04 14:35:50",
+  "sentences_tested": 3,
+  "results": [
+    {
+      "id": "medical_ezafe",
+      "description": "Medical terminology with critical Persian ezafe and complex acronyms",
+      "raw_text": "پروتئین‌های خانواده BCL-2 با مهار مسیر آپوپتوز میتوکندریایی، بقای سلول‌های توموری را تضمین می‌کنند.",
+      "optimized_text": "پروتئین‌های خانواده بی‌سی‌ال دو با مهار مسیر آپوپتوز میتوکندریایی، بقای سلول‌های توموری را تضمین می‌کنند.",
+      "output_audio": "audio\\voice-benchmark\\results\\medical_ezafe.mp3",
+      "latency_seconds": 3.534,
+      "provider_used": "edge-tts",
+      "voice_used": "fa-IR-DilaraNeural",
+      "status": "success"
+    },
+    {
+      "id": "numbers_percentage",
+      "description": "Percentage and numerical metrics with ZWNJ pluralization",
+      "raw_text": "بیش از ۷۵٪ بیماران در مرحله دوم درمان، پاسخ بالینی مطلوبی نشان دادند.",
+      "optimized_text": "بیش از هفتاد و پنج٪ بیماران در مرحله دوم درمان، پاسخ بالینی مطلوبی نشان دادند.",
+      "output_audio": "audio\\voice-benchmark\\results\\numbers_percentage.mp3",
+      "latency_seconds": 2.709,
+      "provider_used": "edge-tts",
+      "voice_used": "fa-IR-DilaraNeural",
+      "status": "success"
+    },
+    {
+      "id": "cinematic_narrative",
+      "description": "Dramatic narrative pacing and emotional breath pauses",
+      "raw_text": "در ژرفای تاریکی سلول، یک تصمیم سرنوشت‌ساز گرفته می‌شود: مرگ یا بقا؟",
+      "optimized_text": "در ژرفای تاریکی سلول، یک تصمیم سرنوشت‌ساز گرفته می‌شود: مرگ یا بقا؟",
+      "output_audio": "audio\\voice-benchmark\\results\\cinematic_narrative.mp3",
+      "latency_seconds": 3.003,
+      "provider_used": "edge-tts",
+      "voice_used": "fa-IR-DilaraNeural",
+      "status": "success"
+    }
+  ]
+}

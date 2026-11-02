@@ -1,0 +1,60 @@
+{
+  "system_description": "Pronunciation Overrides Layer for Iranian Academic & Scientific Terms",
+  "version": "1.0.0",
+  "rules": {
+    "visible_on_screen": "MUST remain authentic Persian script with standard orthography",
+    "tts_phonetic_input": "Uses Latin/Finglish or detailed diacritics to guarantee exact oral delivery"
+  },
+  "overrides": {
+    "بقیه‌الله": {
+      "display": "بقیه‌الله (عج)",
+      "tts_guide": "baghiyatollah",
+      "category": "proper_noun"
+    },
+    "هوش مصنوعی": {
+      "display": "هوش مصنوعی و داده",
+      "tts_guide": "hoosh-e masnooee va dadeh",
+      "category": "technology"
+    },
+    "آیین‌نامه": {
+      "display": "آیین‌نامه",
+      "tts_guide": "aeen-nameh-ye",
+      "category": "regulation"
+    },
+    "استعدادهای درخشان": {
+      "display": "استعدادهای درخشان",
+      "tts_guide": "estedadhaye derakhshan",
+      "category": "academic_program"
+    },
+    "پژوهشگر": {
+      "display": "دانشجوی پژوهشگر",
+      "tts_guide": "daneshjoo-ye pazhooheshgar",
+      "category": "academic_title"
+    },
+    "فناور": {
+      "display": "فناور برجسته",
+      "tts_guide": "fan-aavar-e barjasteh",
+      "category": "academic_title"
+    },
+    "فارغ‌التحصیلی": {
+      "display": "فراغت از تحصیل",
+      "tts_guide": "feraghat az tahsil",
+      "category": "milestone"
+    },
+    "حدنصاب": {
+      "display": "حدنصاب قبولی",
+      "tts_guide": "hadde nesab-e ghabooli",
+      "category": "threshold"
+    },
+    "بند کاف": {
+      "display": "بند «کاف»",
+      "tts_guide": "band-e kaaf",
+      "category": "decree"
+    },
+    "ماده دو": {
+      "display": "ماده ۲",
+      "tts_guide": "maadde-ye do",
+      "category": "article"
+    }
+  }
+}

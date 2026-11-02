@@ -1,0 +1,181 @@
+{
+  "projectId": "bmsu_10year_documentary",
+  "projectTitleFa": "مستند کارنامه زرین ۱۰ ساله کمیته تحقیقات و فناوری بقیةالله (عج)",
+  "domain": "BIOMEDICAL",
+  "totalDurationFrames": 960,
+  "fps": 30,
+  "bpm": 124,
+  "themeId": "DARK_GRAPHITE_TECH",
+  "voiceActor": "Puck",
+  "egmCertification": {
+    "certifiedAt": "2026-11-01T10:49:30.226Z",
+    "goldfishScores": {
+      "dramaturgyScore": 9.8,
+      "semioticsScore": 9.5,
+      "cameraScore": 9.7,
+      "typographyScore": 9.6,
+      "feasibilityScore": 9.9
+    }
+  },
+  "beats": [
+    {
+      "beatId": "beat_1_hook",
+      "actIndex": 1,
+      "startFrame": 0,
+      "endFrame": 180,
+      "dramaturgicalRole": "HOOK_PARADOX",
+      "actionVerb": "MONUMENTAL_SLAM",
+      "voiceover": {
+        "textFa": "چهار سال پیاپی در صدر ارزشیابی وزارت بهداشت؛ چگونه جوان‌ترین دانشگاه کشور بر قله تحقیقات ایستاد؟",
+        "wordCount": 16
+      },
+      "typography": {
+        "kickerFa": "صدرنشین بلامنازع ارزشیابی کشوری",
+        "monumentalWordFa": "چهار سال متوالی",
+        "subtitleFa": "تندیس زرین پنج‌ستاره و رتبه نخست تحقیقات سلامت در سراسر ایران",
+        "fontSizePx": 160
+      },
+      "primaryActor": {
+        "actorType": "CONSTELLATION_CLUSTER",
+        "accentColor": "#F59E0B"
+      },
+      "stationCoords": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "cameraFlightOut": {
+        "trajectory": "WHIP_PAN_RIGHT",
+        "bankingRollDeg": 3.2,
+        "durationFrames": 24
+      }
+    },
+    {
+      "beatId": "beat_2_context",
+      "actIndex": 2,
+      "startFrame": 180,
+      "endFrame": 380,
+      "dramaturgicalRole": "PHYSICAL_CONTEXT",
+      "actionVerb": "ISOMETRIC_EXTRUDE",
+      "voiceover": {
+        "textFa": "از تالارهای همایش برج میلاد با بیش از دو هزار مقاله، تا ثبت سند تاریخی در معتبرترین ژورنال جهان؛ د لنست!",
+        "wordCount": 20
+      },
+      "typography": {
+        "kickerFa": "افتخار جهانی سلامت",
+        "monumentalWordFa": "ثبت مقاله در Lancet",
+        "subtitleFa": "میزبانی بزرگ‌ترین بخش دانشجویی کشور در کنگره بین‌المللی",
+        "fontSizePx": 145
+      },
+      "primaryActor": {
+        "actorType": "ISOMETRIC_DOCUMENT_PLATE",
+        "imagePath": "assets/images/act4_clinical_evidence.png",
+        "accentColor": "#06B6D4"
+      },
+      "stationCoords": {
+        "x": 1920,
+        "y": 0,
+        "z": -200
+      },
+      "cameraFlightOut": {
+        "trajectory": "DEEP_Z_PLUNGE",
+        "durationFrames": 22
+      }
+    },
+    {
+      "beatId": "beat_3_friction",
+      "actIndex": 3,
+      "startFrame": 380,
+      "endFrame": 580,
+      "dramaturgicalRole": "SYSTEMIC_FRICTION",
+      "actionVerb": "APERTURE_CRASH_DIVE",
+      "voiceover": {
+        "textFa": "بحران همه‌گیری کرونا و صف‌آرایی علمی نخبگان؛ جهش شتابان در کارآزمایی بالینی و تولد واکسن ملی نورا!",
+        "wordCount": 17
+      },
+      "typography": {
+        "kickerFa": "حماسه سلامت و فناوری زیستی",
+        "monumentalWordFa": "واکسن ملی نورا",
+        "subtitleFa": "کارآزمایی بالینی پیشگام با ضریب تاثیر ۲۰.۶۹",
+        "fontSizePx": 150
+      },
+      "primaryActor": {
+        "actorType": "APERTURE_CAD_LENS",
+        "imagePath": "assets/images/act2_cryo_microscope.png",
+        "accentColor": "#10B981"
+      },
+      "stationCoords": {
+        "x": 1920,
+        "y": 0,
+        "z": -1600
+      },
+      "cameraFlightOut": {
+        "trajectory": "WHIP_PAN_RIGHT",
+        "bankingRollDeg": -2.5,
+        "durationFrames": 20
+      }
+    },
+    {
+      "beatId": "beat_4_climax",
+      "actIndex": 4,
+      "startFrame": 580,
+      "endFrame": 760,
+      "dramaturgicalRole": "PARADIGM_CLIMAX",
+      "actionVerb": "SYNAPSE_BEAM_BURST",
+      "voiceover": {
+        "textFa": "سیزده پژوهشگر برجسته کشوری، مدال طلای اختراعات ژنو و پیشگامی مطلق در کلان‌منطقه ده علوم پزشکی.",
+        "wordCount": 16
+      },
+      "typography": {
+        "kickerFa": "تالار سرآمدان نخبگی",
+        "monumentalWordFa": "۱۳ نخبه کشوری",
+        "subtitleFa": "رکورد بی‌سابقه بند ک استعدادهای درخشان و مدال جهانی ژنو",
+        "fontSizePx": 155
+      },
+      "primaryActor": {
+        "actorType": "BESPOKE_SVG_APPARATUS",
+        "accentColor": "#F59E0B"
+      },
+      "stationCoords": {
+        "x": 3840,
+        "y": 0,
+        "z": -1600
+      },
+      "cameraFlightOut": {
+        "trajectory": "DEEP_Z_PLUNGE",
+        "durationFrames": 24
+      }
+    },
+    {
+      "beatId": "beat_5_anthem",
+      "actIndex": 5,
+      "startFrame": 760,
+      "endFrame": 960,
+      "dramaturgicalRole": "HORIZON_ANTHEM",
+      "actionVerb": "MONUMENTAL_SLAM",
+      "voiceover": {
+        "textFa": "اکنون در گام دوم تحول، به سوی مرجعیت علمی جهان گام برمی‌داریم. آینده را ما می‌سازیم!",
+        "wordCount": 15
+      },
+      "typography": {
+        "kickerFa": "افق پیش رو • هوش مصنوعی سلامت",
+        "monumentalWordFa": "آینده را ما می‌سازیم",
+        "subtitleFa": "کمیته تحقیقات و فناوری دانشجویی دانشگاه علوم پزشکی بقیةالله (عج)",
+        "fontSizePx": 165
+      },
+      "primaryActor": {
+        "actorType": "BESPOKE_SVG_APPARATUS",
+        "accentColor": "#06B6D4"
+      },
+      "stationCoords": {
+        "x": 3840,
+        "y": 0,
+        "z": -3200
+      },
+      "cameraFlightOut": {
+        "trajectory": "STATIONARY_HOLD",
+        "durationFrames": 0
+      }
+    }
+  ]
+}

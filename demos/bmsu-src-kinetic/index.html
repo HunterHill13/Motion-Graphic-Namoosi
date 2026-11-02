@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>BMSU Student Research & Technology Committee — Kinetic Masterpiece</title>
+<style>
+@font-face {
+  font-family: 'Yekan Bakh';
+  src: url('/public/fonts/YekanBakh/YekanBakh-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Yekan Bakh';
+  src: url('/public/fonts/YekanBakh/YekanBakh-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Yekan Bakh';
+  src: url('/public/fonts/YekanBakh/YekanBakh-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: #0A0818;
+  overflow: hidden;
+  width: 1920px; height: 1080px;
+  user-select: none;
+  font-family: 'Yekan Bakh', system-ui, sans-serif;
+}
+canvas {
+  display: block;
+  width: 1920px;
+  height: 1080px;
+}
+</style>
+</head>
+<body>
+<canvas id="stage" width="1920" height="1080"></canvas>
+
+<script>
+window.DEMO = {
+  width: 1920,
+  height: 1080,
+  fps: 30,
+  duration: 64.0,
+  motionBlur: { samples: 1, shutter: 0.5 }
+};
+</script>
+
+<script type="module">
+// ============================================================
+// CINEMATIC MOTION DIRECTOR: BMSU SRC KINETIC PRODUCTION ENGINE
+// ============================================================
+
+const canvas = document.getElementById('stage');
+const ctx = canvas.getContext('2d');
+
+// Palette constants:
+const PLUM = '#201A3C';
+const OBSIDIAN = '#0A0818';
+const CORAL = '#F45B69';
+const GOLD = '#FCE1D4';
+const GOLD_METALLIC = '#FFC857';
+const WHITE = '#FFFFFF';
+const TEAL = '#00E5FF';
+
+// Easing and physical mathematics:
+const clamp = (x, a = 0, b = 1) => x < a ? a : x > b ? b : x;
+const lerp = (a, b, u) => a + (b - a) * u;
+const inv = (a, b, x) => clamp((x - a) / (b - a));
+
+function bezier(x1, y1, x2, y2) {
+  const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+  const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+  const sx = t => ((ax * t + bx) * t + cx) * t;
+  const sy = t => ((ay * t + by) * t + cy) * t;
+  const dx = t => (3 * ax * t + 2 * bx) * t + cx;
+  return u => {
+    if (u <= 0) return 0;
+    if (u >= 1) return 1;
+    let t = u;
+    for (let i = 0; i < 10; i++) {
+      const d = dx(t);
+      if (Math.abs(d) < 1e-6) break;
+      t = clamp(t - (sx(t) - u) / d);
+    }
+    return sy(t);
+  };
+}
+
+const easePop = bezier(0.34, 1.56, 0.64, 1);
+const easeOutQuart = u => 1 - Math.pow(1 - u, 4);
+const easeInOutCubic = u => u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+
+function spring(t, f = 2.4, z = 0.42) {
+  if (t <= 0) return 0;
+  const w = 2 * Math.PI * f, a = z * w, b = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-a * t) * (Math.cos(b * t) + (a / b) * Math.sin(b * t));
+}
+
+function springV(t, f = 2.4, z = 0.42) {
+  if (t <= 0) return 0;
+  const w = 2 * Math.PI * f, a = z * w, b = w * Math.sqrt(1 - z * z);
+  return Math.exp(-a * t) * (w * w / b) * Math.sin(b * t);
+}
+
+function popPhys(t, t0, f = 2.4, z = 0.42, amt = 0.12) {
+  const tt = t - t0;
+  if (tt < 0) return [0, 0];
+  const s = spring(tt, f, z);
+  const k = clamp(springV(tt, f, z) / (2 * Math.PI * f) * amt * 2, -0.3, 0.3);
+  return [s, k];
+}
+
+// ------------------------------------------------------------
+// ASSET PRELOADING: Images, Logomotion sequence, and fonts
+// ------------------------------------------------------------
+const IMAGE_FILES = {
+  post_2062: '/public/achievement_images/post_2062_1.jpg',
+  post_145: '/public/achievement_images/post_145_1.jpg',
+  post_264: '/public/achievement_images/post_264_1.jpg',
+  post_1301: '/public/achievement_images/post_1301_1.jpg',
+  post_1008: '/public/achievement_images/post_1008_1.jpg',
+  post_1432: '/public/achievement_images/post_1432_1.jpg',
+  post_1934: '/public/achievement_images/post_1934_1.jpg',
+  post_1492: '/public/achievement_images/post_1492_1.jpg',
+  media_statues: '/public/achievement_images/media_1792694552419_4b2cf0b8.jpg'
+};
+
+const IMAGES = {};
+const loadImage = src => new Promise((resolve, reject) => {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => resolve(img);
+  img.onerror = () => {
+    console.warn('Image load error, falling back to dummy canvas for:', src);
+    const c = document.createElement('canvas');
+    c.width = 800; c.height = 600;
+    const cx = c.getContext('2d');
+    cx.fillStyle = '#201A3C'; cx.fillRect(0, 0, 800, 600);
+    cx.fillStyle = '#FFC857'; cx.font = 'bold 36px sans-serif';
+    cx.fillText('BMSU ARCHIVE', 250, 300);
+    resolve(c);
+  };
+  img.src = src;
+});
+
+const LOGO_FRAMES = [];
+const TOTAL_LOGO_FRAMES = 211;
+
+console.log('[bmsu-kinetic] Preloading assets and fonts...');
+await document.fonts.ready;
+
+// Load achievement images
+await Promise.all(Object.entries(IMAGE_FILES).map(async ([key, url]) => {
+  IMAGES[key] = await loadImage(url);
+}));
+
+// Load logomotion frames in parallel batches
+const logoPromises = [];
+for (let i = 1; i <= TOTAL_LOGO_FRAMES; i++) {
+  const numStr = String(i).padStart(4, '0');
+  const url = `/public/videos/logomotion_frames/frame_${numStr}.png`;
+  logoPromises.push(loadImage(url));
+}
+const loadedLogo = await Promise.all(logoPromises);
+loadedLogo.forEach((img, idx) => { LOGO_FRAMES[idx] = img; });
+
+console.log(`[bmsu-kinetic] Assets ready! Loaded ${Object.keys(IMAGES).length} photos & ${LOGO_FRAMES.length} logo frames.`);
+
+// ------------------------------------------------------------
+// DATA: 13 Elite Badges
+// ------------------------------------------------------------
+const ELITE_NAMES = [
+  'دکتر امیرحسین غزاله', 'دکتر رنجکش', 'دکتر پای‌پر', 'دکتر ظهیری',
+  'دکتر رضاپور', 'دکتر ایمانی‌زاده', 'دکتر اصغردوست', 'دکتر بلوریان',
+  'دکتر سلیمانی‌تبار', 'دکتر مصطفی اسلامی', 'دکتر چرتاب', 'دکتر عبدالرشیدی', 'دکتر عیسی‌زاده'
+];
+
+// ------------------------------------------------------------
+// RENDER HELPERS
+// ------------------------------------------------------------
+function drawDynamicBackground(t) {
+  // Deep space obsidian gradient
+  const bg = ctx.createRadialGradient(960, 540, 100, 960, 540, 1100);
+  bg.addColorStop(0, '#28204A');
+  bg.addColorStop(0.6, '#130F26');
+  bg.addColorStop(1, '#080612');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, 1920, 1080);
+
+  // Subtle animated perspective grid
+  ctx.save();
+  ctx.strokeStyle = 'rgba(244, 91, 105, 0.07)';
+  ctx.lineWidth = 1;
+  const gridOffset = (t * 40) % 80;
+  for (let x = 0; x <= 1920; x += 80) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, 1080);
+    ctx.stroke();
+  }
+  for (let y = gridOffset; y <= 1080; y += 80) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(1920, y);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Floating ambient kinetic dust
+  ctx.save();
+  for (let i = 0; i < 40; i++) {
+    const px = (Math.sin(i * 123.4 + t * 0.4) * 0.5 + 0.5) * 1920;
+    const py = (Math.cos(i * 98.7 + t * 0.3) * 0.5 + 0.5) * 1080;
+    const r = (Math.sin(i * 45.6 + t) * 0.5 + 0.5) * 2.5 + 1;
+    ctx.fillStyle = i % 2 === 0 ? 'rgba(255, 200, 87, 0.4)' : 'rgba(244, 91, 105, 0.35)';
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawPunchWords(text, subtext, x, y, scale = 1, alpha = 1, accent = GOLD_METALLIC) {
+  if (alpha <= 0.01) return;
+  ctx.save();
+  ctx.globalAlpha = clamp(alpha);
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Glow shadow
+  ctx.shadowColor = 'rgba(244, 91, 105, 0.6)';
+  ctx.shadowBlur = 24;
+
+  // Subtext
+  if (subtext) {
+    ctx.font = '900 32px "Yekan Bakh"';
+    ctx.fillStyle = CORAL;
+    ctx.fillText(subtext, 0, -56);
+  }
+
+  // Main punch word
+  ctx.font = '900 84px "Yekan Bakh"';
+  ctx.fillStyle = WHITE;
+  ctx.fillText(text, 0, 16);
+
+  // Underline glow stroke
+  ctx.shadowBlur = 12;
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  const w = ctx.measureText(text).width;
+  ctx.moveTo(-w * 0.45, 72);
+  ctx.lineTo(w * 0.45, 72);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawFramedPhoto(img, cx, cy, w, h, enterU, shape = 'hexagon') {
+  if (!img || enterU <= 0.01) return;
+  ctx.save();
+  ctx.translate(cx, cy);
+
+  const u = easePop(clamp(enterU));
+  ctx.scale(u, u);
+  ctx.globalAlpha = clamp(enterU * 2);
+
+  // Outer ambient glow ring
+  ctx.shadowColor = 'rgba(255, 200, 87, 0.5)';
+  ctx.shadowBlur = 35;
+  ctx.strokeStyle = GOLD_METALLIC;
+  ctx.lineWidth = 6;
+
+  ctx.beginPath();
+  if (shape === 'circle') {
+    ctx.arc(0, 0, w / 2, 0, Math.PI * 2);
+  } else if (shape === 'hexagon') {
+    const r = w / 2;
+    for (let i = 0; i < 6; i++) {
+      const a = (i * 60) * Math.PI / 180;
+      const x = r * Math.cos(a), y = r * Math.sin(a);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  } else {
+    // Rounded rect
+    const r = 24;
+    ctx.roundRect(-w / 2, -h / 2, w, h, r);
+  }
+  ctx.stroke();
+
+  // Clip and draw image
+  ctx.save();
+  ctx.clip();
+  ctx.drawImage(img, -w / 2, -h / 2, w, h);
+  ctx.restore();
+
+  // Gloss sheen overlay
+  const grad = ctx.createLinearGradient(-w / 2, -h / 2, w / 2, h / 2);
+  grad.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
+  grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.0)');
+  grad.addColorStop(1, 'rgba(32, 26, 60, 0.4)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawGoldenStar(cx, cy, r, rot = 0, scale = 1, alpha = 1) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rot);
+  ctx.scale(scale, scale);
+  ctx.globalAlpha = clamp(alpha);
+
+  ctx.shadowColor = 'rgba(255, 200, 87, 0.8)';
+  ctx.shadowBlur = 20;
+  ctx.fillStyle = GOLD_METALLIC;
+
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const a1 = (i * 72 - 90) * Math.PI / 180;
+    const a2 = a1 + 36 * Math.PI / 180;
+    const x1 = r * Math.cos(a1), y1 = r * Math.sin(a1);
+    const x2 = (r * 0.45) * Math.cos(a2), y2 = (r * 0.45) * Math.sin(a2);
+    if (i === 0) ctx.moveTo(x1, y1); else ctx.lineTo(x1, y1);
+    ctx.lineTo(x2, y2);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+// ============================================================
+// MAIN RENDER AT TIME T (SEEKABLE FUNCTION)
+// ============================================================
+window.renderAt = async (t) => {
+  ctx.clearRect(0, 0, 1920, 1080);
+  drawDynamicBackground(t);
+
+  // ----------------------------------------------------------
+  // SCENE 1: 0.0s – 3.0s (Hook & PR Launch)
+  // ----------------------------------------------------------
+  if (t < 3.2) {
+    const u1 = inv(0.0, 0.8, t);
+    const [s1, k1] = popPhys(t, 0.0, 2.5, 0.4, 0.15);
+    const alpha1 = inv(2.6, 3.1, t);
+
+    ctx.save();
+    ctx.translate(960, 540);
+    ctx.scale(s1 * (1 - k1), s1 * (1 + k1));
+    ctx.globalAlpha = 1 - alpha1;
+
+    // Glowing prism rings
+    ctx.strokeStyle = CORAL;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(0, 0, 280 + Math.sin(t * 8) * 10, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = GOLD_METALLIC;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, 310 - Math.cos(t * 6) * 8, 0, Math.PI * 2);
+    ctx.stroke();
+
+    drawPunchWords('روابط عمومی تقدیم می‌کند', 'دانشگاه علوم پزشکی بقیه‌الله (عج)', 0, -20, 1.0, 1.0);
+    ctx.restore();
+
+    if (t >= 1.5) {
+      const u1b = inv(1.5, 2.0, t);
+      const [s1b] = popPhys(t, 1.5, 3.0, 0.45);
+      drawPunchWords('کانون اقتدار و نوآوری', 'قطب پژوهش‌های راهبردی سلامت', 960, 720, s1b, (1 - alpha1) * u1b, CORAL);
+    }
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 2: 3.0s – 6.5s (4 Years Consecutive 5-Star Rank #1)
+  // ----------------------------------------------------------
+  if (t >= 2.9 && t < 6.7) {
+    const uEnter = inv(3.0, 3.6, t);
+    const uExit = inv(6.2, 6.6, t);
+    const a = (1 - uExit) * uEnter;
+
+    // 5 physical golden stars stagger
+    const starStart = 3.1;
+    for (let i = 0; i < 5; i++) {
+      const tStar = starStart + i * 0.08;
+      const [sStar] = popPhys(t, tStar, 3.2, 0.38, 0.2);
+      const xStar = 640 + i * 160;
+      const yStar = 360 - Math.sin((i / 4) * Math.PI) * 45;
+      drawGoldenStar(xStar, yStar, 44, (t - tStar) * 0.5, sStar, a);
+    }
+
+    const [sText] = popPhys(t, 3.4, 2.4, 0.42);
+    drawPunchWords('۴ سال صدرنشینی ۵ ستاره', 'بالاترین رتبه ارزشیابی وزارت بهداشت', 960, 520, sText, a, GOLD_METALLIC);
+
+    if (t >= 4.2) {
+      const [sRank] = popPhys(t, 4.2, 2.6, 0.4);
+      drawPunchWords('رتبه اول علوم پزشکی کشور', 'در میان تمامی دانشگاه‌های علوم پزشکی ایران', 960, 740, sRank, a, CORAL);
+    }
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 3: 6.5s – 10.0s (2100+ Documents & 68 Stations)
+  // ----------------------------------------------------------
+  if (t >= 6.4 && t < 10.2) {
+    const uEnter = inv(6.5, 7.0, t);
+    const uExit = inv(9.7, 10.1, t);
+    const a = (1 - uExit) * uEnter;
+
+    // Digital rolling counter
+    const countProg = easeOutQuart(clamp((t - 6.6) / 1.5));
+    const currentNum = Math.round(countProg * 2100);
+
+    drawPunchWords(`${currentNum}+ سند رسمی ثبت‌شده`, '۶۸ ایستگاه تاریخی افتخار', 580, 480, 1.0, a, GOLD_METALLIC);
+
+    // Photo post_2062_1 (historical roadmap)
+    const [sPhoto] = popPhys(t, 7.2, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_2062, 1380, 540, 580, 440, sPhoto * a, 'hexagon');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 4: 10.0s – 14.5s (Six Pillars of Scientific Authority)
+  // ----------------------------------------------------------
+  if (t >= 9.9 && t < 14.7) {
+    const uEnter = inv(10.0, 10.6, t);
+    const uExit = inv(14.2, 14.6, t);
+    const a = (1 - uExit) * uEnter;
+
+    // Center unfolding hexagon
+    const [sHex] = popPhys(t, 10.0, 2.2, 0.4);
+    ctx.save();
+    ctx.translate(960, 520);
+    ctx.scale(sHex * a, sHex * a);
+    ctx.rotate(t * 0.15);
+
+    ctx.strokeStyle = 'rgba(255, 200, 87, 0.4)';
+    ctx.lineWidth = 3;
+    for (let r = 160; r <= 320; r += 80) {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const ang = (i * 60) * Math.PI / 180;
+        const x = r * Math.cos(ang), y = r * Math.sin(ang);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // The 6 Authority Pillar Nodes
+    const PILLARS = ['تثبیت ۵ ستاره', '۱۳ نخبه بند ک', 'کنگره‌های برج میلاد', 'مدال جهانی ژنو', 'مقالات لانسِت و نورا', 'دبیرخانه کلان‌منطقه ۱۰'];
+    PILLARS.forEach((p, idx) => {
+      const tNode = 10.6 + idx * 0.12;
+      const [sNode] = popPhys(t, tNode, 3.0, 0.4);
+      const ang = (idx * 60 - 90) * Math.PI / 180;
+      const nx = 960 + 360 * Math.cos(ang);
+      const ny = 520 + 260 * Math.sin(ang);
+
+      ctx.save();
+      ctx.translate(nx, ny);
+      ctx.scale(sNode * a, sNode * a);
+
+      // Node pill
+      ctx.fillStyle = 'rgba(32, 26, 60, 0.85)';
+      ctx.strokeStyle = CORAL;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(-110, -26, 220, 52, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = WHITE;
+      ctx.font = '800 24px "Yekan Bakh"';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p, 0, 2);
+      ctx.restore();
+    });
+
+    drawPunchWords('شش ستون اقتدار علمی', 'ارکان بنیادین حاکمیت پژوهش و فناوری', 960, 520, 1.0, a, GOLD_METALLIC);
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 5: 14.5s – 19.0s (1395: Nephrology Congress & The Lancet)
+  // ----------------------------------------------------------
+  if (t >= 14.4 && t < 19.2) {
+    const uEnter = inv(14.5, 15.0, t);
+    const uExit = inv(18.7, 19.1, t);
+    const a = (1 - uExit) * uEnter;
+
+    const [sTxt] = popPhys(t, 14.6, 2.5, 0.42);
+    drawPunchWords('۱۳۹۵: میزبانی برج میلاد', 'کنگره بین‌المللی نفرولوژی و مقاله رسمی در', 580, 460, sTxt, a, CORAL);
+
+    if (t >= 15.4) {
+      const [sLancet] = popPhys(t, 15.4, 2.8, 0.38);
+      drawPunchWords('THE LANCET', 'ثبت جهانی دستاوردهای علمی', 580, 640, sLancet, a, GOLD_METALLIC);
+    }
+
+    // Photo post_145_1
+    const [sPhoto] = popPhys(t, 15.0, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_145, 1380, 540, 560, 420, sPhoto * a, 'hexagon');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 6: 19.0s – 24.0s (Shanghai Citation Leap & 264 Papers)
+  // ----------------------------------------------------------
+  if (t >= 18.9 && t < 24.2) {
+    const uEnter = inv(19.0, 19.5, t);
+    const uExit = inv(23.7, 24.1, t);
+    const a = (1 - uExit) * uEnter;
+
+    // Rising bar graphs
+    const barProg = easeOutQuart(clamp((t - 19.2) / 1.2));
+    ctx.save();
+    ctx.translate(180, 720);
+    for (let b = 0; b < 5; b++) {
+      const bh = (120 + b * 60) * barProg;
+      ctx.fillStyle = b === 4 ? CORAL : 'rgba(255, 200, 87, 0.7)';
+      ctx.fillRect(b * 55, -bh, 42, bh);
+    }
+    ctx.restore();
+
+    drawPunchWords('جهش استنادی شانگهای', 'رتبه ۵ کشور در مقالات ۱٪ برتر', 600, 440, 1.0, a, GOLD_METALLIC);
+    drawPunchWords('۲۶۴ مقاله پراستناد', 'صعود درخشان رتبه‌بندی بین‌المللی شانگهای', 600, 620, 1.0, a, WHITE);
+
+    // Photo post_264_1
+    const [sPhoto] = popPhys(t, 19.8, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_264, 1480, 540, 480, 420, sPhoto * a, 'rect');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 7: 24.0s – 29.5s (COVID-19 Trials & General Salami Plaque)
+  // ----------------------------------------------------------
+  if (t >= 23.9 && t < 29.7) {
+    const uEnter = inv(24.0, 24.5, t);
+    const uExit = inv(29.2, 29.6, t);
+    const a = (1 - uExit) * uEnter;
+
+    drawPunchWords('۴۰ طرح جهاد کرونا', 'ترایال‌های بالینی و پلاسما درمانی در خط مقدم', 580, 450, 1.0, a, CORAL);
+    drawPunchWords('لوح زرین فرماندهی', 'تجلیل ویژه سرلشکر سلامی در جشنواره باقرالعلوم', 580, 650, 1.0, a, GOLD_METALLIC);
+
+    // Photo post_1301_1
+    const [sPhoto] = popPhys(t, 24.8, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_1301, 1400, 540, 580, 440, sPhoto * a, 'hexagon');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 8: 29.5s – 34.0s (Secretariat of Tehran Macro-Region 10)
+  // ----------------------------------------------------------
+  if (t >= 29.4 && t < 34.2) {
+    const uEnter = inv(29.5, 30.0, t);
+    const uExit = inv(33.7, 34.1, t);
+    const a = (1 - uExit) * uEnter;
+
+    // Constellation of 10 capital universities
+    ctx.save();
+    ctx.translate(260, 540);
+    for (let i = 0; i < 10; i++) {
+      const ang = (i * 36) * Math.PI / 180;
+      const d = 160 + (i % 2) * 50;
+      const nx = d * Math.cos(ang + t * 0.2);
+      const ny = d * Math.sin(ang + t * 0.2);
+
+      ctx.strokeStyle = 'rgba(244, 91, 105, 0.35)';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(nx, ny);
+      ctx.stroke();
+
+      ctx.fillStyle = i === 0 ? GOLD_METALLIC : CORAL;
+      ctx.beginPath();
+      ctx.arc(nx, ny, 8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    drawPunchWords('دبیرخانه کلان‌منطقه ۱۰', 'راهبری علمی ۱۰ دانشگاه برتر پایتخت', 640, 440, 1.0, a, GOLD_METALLIC);
+    drawPunchWords('مرجعیت علمی تهران', 'انتخاب بقیه‌الله به عنوان کانون هدایت کلان‌منطقه', 640, 640, 1.0, a, WHITE);
+
+    // Photo post_1008_1
+    const [sPhoto] = popPhys(t, 30.2, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_1008, 1480, 540, 500, 420, sPhoto * a, 'rect');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 9: 34.0s – 38.5s (24th National Annual Congress at Milad)
+  // ----------------------------------------------------------
+  if (t >= 33.9 && t < 38.7) {
+    const uEnter = inv(34.0, 34.5, t);
+    const uExit = inv(38.2, 38.6, t);
+    const a = (1 - uExit) * uEnter;
+
+    drawPunchWords('کنگره ۲۴ سالیانه ملی', 'حماسه بزرگ پژوهش در برج میلاد', 580, 440, 1.0, a, GOLD_METALLIC);
+    drawPunchWords('۲۱۸۲ مقاله علمی', 'با مشارکت ۸۴ دانشگاه علوم پزشکی سراسر کشور', 580, 640, 1.0, a, CORAL);
+
+    // Photo post_1432_1
+    const [sPhoto] = popPhys(t, 34.8, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_1432, 1400, 540, 580, 440, sPhoto * a, 'hexagon');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 10: 38.5s – 42.0s (Noora Vaccine Phase 1 Trial)
+  // ----------------------------------------------------------
+  if (t >= 38.4 && t < 42.2) {
+    const uEnter = inv(38.5, 39.0, t);
+    const uExit = inv(41.7, 42.1, t);
+    const a = (1 - uExit) * uEnter;
+
+    // Molecular helix rings
+    ctx.save();
+    ctx.translate(420, 540);
+    ctx.rotate(t * 0.5);
+    for (let k = 0; k < 6; k++) {
+      const ang = (k * 60) * Math.PI / 180;
+      ctx.strokeStyle = 'rgba(0, 229, 255, 0.5)';
+      ctx.beginPath();
+      ctx.arc(100 * Math.cos(ang), 100 * Math.sin(ang), 24, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    drawPunchWords('واکسن ملی نورا', 'چاپ مقاله فاز یک کارآزمایی بالینی در JMV', 880, 440, 1.0, a, TEAL);
+    drawPunchWords('IF = 20.69', 'ضریب تأثیر درخشان نشریه معتبر جهانی', 880, 640, 1.0, a, GOLD_METALLIC);
+
+    // Photo post_1934_1
+    const [sPhoto] = popPhys(t, 39.2, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_1934, 1480, 540, 520, 440, sPhoto * a, 'rect');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 11: 42.0s – 46.5s (Geneva World Invention Bronze & Abu Rayhan)
+  // ----------------------------------------------------------
+  if (t >= 41.9 && t < 46.7) {
+    const uEnter = inv(42.0, 42.5, t);
+    const uExit = inv(46.2, 46.6, t);
+    const a = (1 - uExit) * uEnter;
+
+    // Two dual medals dropping
+    const [sMedal1] = popPhys(t, 42.2, 2.8, 0.38);
+    const [sMedal2] = popPhys(t, 42.6, 2.8, 0.38);
+
+    ctx.save();
+    ctx.translate(220, 520);
+    // Bronze Geneva Medal
+    ctx.save();
+    ctx.translate(-70, 0);
+    ctx.scale(sMedal1, sMedal1);
+    ctx.fillStyle = '#CD7F32';
+    ctx.beginPath();
+    ctx.arc(0, 0, 70, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.fillStyle = WHITE;
+    ctx.font = '900 22px "Yekan Bakh"';
+    ctx.textAlign = 'center';
+    ctx.fillText('GENEVA', 0, 8);
+    ctx.restore();
+
+    // Silver Abu Rayhan Medal
+    ctx.save();
+    ctx.translate(80, 0);
+    ctx.scale(sMedal2, sMedal2);
+    ctx.fillStyle = '#C0C0C0';
+    ctx.beginPath();
+    ctx.arc(0, 0, 65, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.fillStyle = '#130F26';
+    ctx.font = '900 20px "Yekan Bakh"';
+    ctx.textAlign = 'center';
+    ctx.fillText('ابوریحان', 0, 8);
+    ctx.restore();
+    ctx.restore();
+
+    drawPunchWords('مدال جهانی ژنو سوئیس', 'افتخار بین‌المللی مسابقات اختراعات و نقره ابوریحان', 620, 440, 1.0, a, GOLD_METALLIC);
+    drawPunchWords('ورود به باشگاه ۵ ستاره', 'تثبیت جایگاه زرین میان نخبگان برتر دنیا', 620, 640, 1.0, a, WHITE);
+
+    // Photo post_1492_1
+    const [sPhoto] = popPhys(t, 42.8, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.post_1492, 1460, 540, 500, 420, sPhoto * a, 'hexagon');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 12: 46.5s – 51.0s (Golden Statues: Urmia, Minister, Kerman)
+  // ----------------------------------------------------------
+  if (t >= 46.4 && t < 51.2) {
+    const uEnter = inv(46.5, 47.0, t);
+    const uExit = inv(50.7, 51.1, t);
+    const a = (1 - uExit) * uEnter;
+
+    drawPunchWords('تندیس‌های زرین قهرمانی', 'کنگره ۲۵ ارومیه و کنگره ۲۷ کرمان', 580, 440, 1.0, a, GOLD_METALLIC);
+    drawPunchWords('حضور وزیر بهداشت', 'همایش ملی با حضور دکتر ظفرقندی و فرمانده کل سپاه', 580, 640, 1.0, a, CORAL);
+
+    // Photo media_statues
+    const [sPhoto] = popPhys(t, 47.2, 2.2, 0.45);
+    drawFramedPhoto(IMAGES.media_statues, 1400, 540, 580, 440, sPhoto * a, 'hexagon');
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 13: 51.0s – 55.5s (Brilliant Talents: 13 National Elites)
+  // ----------------------------------------------------------
+  if (t >= 50.9 && t < 55.7) {
+    const uEnter = inv(51.0, 51.5, t);
+    const uExit = inv(55.2, 55.6, t);
+    const a = (1 - uExit) * uEnter;
+
+    drawPunchWords('۱۳ نخبه برجسته کشوری', 'ثبت بالاترین رکورد استعدادهای درخشان آیین‌نامه بند «ک»', 960, 200, 1.0, a, GOLD_METALLIC);
+
+    // Grid of 13 staggered badges
+    const badgeStart = 51.4;
+    ELITE_NAMES.forEach((name, i) => {
+      const tBadge = badgeStart + i * 0.09;
+      const [sB] = popPhys(t, tBadge, 3.0, 0.42);
+
+      const col = i % 4;
+      const row = Math.floor(i / 4);
+      const bx = 320 + col * 420 + (row === 3 ? 210 : 0);
+      const by = 380 + row * 115;
+
+      ctx.save();
+      ctx.translate(bx, by);
+      ctx.scale(sB * a, sB * a);
+
+      // Elite badge container
+      ctx.fillStyle = 'rgba(32, 26, 60, 0.9)';
+      ctx.strokeStyle = i % 2 === 0 ? GOLD_METALLIC : CORAL;
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = 'rgba(244, 91, 105, 0.4)';
+      ctx.shadowBlur = 12;
+
+      ctx.beginPath();
+      ctx.roundRect(-180, -38, 360, 76, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      // Golden star mark
+      drawGoldenStar(-140, 0, 16, 0, 1, 1);
+
+      ctx.fillStyle = WHITE;
+      ctx.font = '800 26px "Yekan Bakh"';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(name, 20, 2);
+
+      ctx.restore();
+    });
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 14: 55.5s – 59.5s (Future Horizon Manifesto)
+  // ----------------------------------------------------------
+  if (t >= 55.4 && t < 59.7) {
+    const uEnter = inv(55.5, 56.0, t);
+    const uExit = inv(59.2, 59.6, t);
+    const a = (1 - uExit) * uEnter;
+
+    // Laser crosshair & cyber matrix
+    ctx.save();
+    ctx.translate(960, 540);
+    ctx.strokeStyle = 'rgba(0, 229, 255, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, 320 + Math.sin(t * 10) * 15, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    if (t < 57.5) {
+      drawPunchWords('هوش مصنوعی سلامت', 'پیشگامی در پزشکی بازساختی و پدافند زیستی نوین', 960, 520, 1.0, a, TEAL);
+    } else {
+      const [sFuture] = popPhys(t, 57.5, 2.5, 0.4);
+      drawPunchWords('«آینده را ما با هم می‌سازیم»', 'گام دوم تحول و مرجعیت علمی جهان', 960, 520, sFuture, a, GOLD_METALLIC);
+    }
+  }
+
+  // ----------------------------------------------------------
+  // SCENE 15: 59.5s – 64.0s (Grand Finale & Smooth Logomotion)
+  // ----------------------------------------------------------
+  if (t >= 59.4) {
+    const uEnter = inv(59.5, 60.0, t);
+    const a = uEnter;
+
+    // Map time 59.5s to 62.83s to frame index 0 .. 210
+    const logomotionDuration = 62.83 - 59.5;
+    const progress = clamp((t - 59.5) / logomotionDuration);
+    const frameIdx = Math.min(TOTAL_LOGO_FRAMES - 1, Math.floor(progress * TOTAL_LOGO_FRAMES));
+
+    const logoImg = LOGO_FRAMES[frameIdx] || LOGO_FRAMES[TOTAL_LOGO_FRAMES - 1];
+
+    // SCENE 15: Full-bleed 1920x1080 Logomotion rendering
+    if (logoImg) {
+      ctx.save();
+      ctx.globalAlpha = a; // Smooth 0.5s fade-in (59.5s to 60.0s)
+
+      // Living hold micro-motion breathing (62.83s to 64.0s)
+      const holdProgress = Math.max(0, t - 62.83);
+      const breathe = 1.0 + Math.sin(holdProgress * 4.0) * 0.012;
+
+      ctx.translate(960, 540);
+      ctx.scale(breathe, breathe);
+
+      // Draw full 1920x1080 with natural aspect ratio and complete canvas coverage
+      ctx.drawImage(logoImg, -960, -540, 1920, 1080);
+      ctx.restore();
+    }
+  }
+};
+
+// Test initial frame 0
+await window.renderAt(0);
+window.__ready = true;
+console.log('[bmsu-kinetic] Initialization complete: window.__ready = true');
+</script>
+</body>
+</html>

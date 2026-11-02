@@ -1,0 +1,12 @@
+title: "Project Title"
+objective: "Primary communication goal of this motion piece"
+audience: "Target demographic or professional audience"
+duration_seconds: 60
+aspect_ratio: "16:9"
+fps: 30
+language: "en"
+genre: "scientific_medical" # educational | scientific_medical | documentary | product_launch | explainer
+tone: "authoritative, cinematic, clear, awe-inspiring"
+palette_preset: "medicalBio" # medicalBio | darkTech | warmEditorial | warmPremium
+key_message: "The core takeaway sentence the audience must remember"
+emotional_arc: "Tension / Mystery -> Investigation -> Revelation -> Clarity"

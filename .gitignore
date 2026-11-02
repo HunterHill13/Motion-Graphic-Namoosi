@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+package-lock.json
+.venv/
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+
+# Audio cache & temporary builds
+/audio/
+public/audio/
+public/achievement_images/
+public/assets/
+public/videos/
+public/data/
+
+# Build and render outputs
+out/
+**/out/
+demos/*/out/
+.cache/
+.scratch/
+
+# Renders
+renders/*
+!renders/FlatVector2D_Master.mp4
+
+# Proprietary / Licensed Fonts
+*.woff2
+*.woff
+*.ttf
+*.otf
+assets/fonts/
+assets/hdri/
+assets/textures/
+.agents/skills/cinematic-motion-director/assets/previews/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Environment Secrets
+.env
+.env.*
+!.env.example
+
+
+
+# Graphify internal cache & temp files
+graphify-out/cache/
+graphify-out/.graphify_*
+# Python
+__pycache__/
+*.py[cod]
+
+# Archives
+*.zip

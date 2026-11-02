@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VisualStateGraph",
+  "description": "Formal State Machine & Semantic Transformation Contract for AI Cinematic Motion Graphics",
+  "type": "object",
+  "required": [
+    "graphId",
+    "initialStateId",
+    "states"
+  ],
+  "properties": {
+    "graphId": {
+      "type": "string",
+      "description": "Unique identifier for the Visual State Graph composition"
+    },
+    "initialStateId": {
+      "type": "string",
+      "description": "ID of the root active visual state"
+    },
+    "states": {
+      "type": "array",
+      "description": "Array of discrete visual states across the composition lifecycle",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/VisualStateNode"
+      }
+    }
+  },
+  "definitions": {
+    "VisualStateNode": {
+      "type": "object",
+      "required": [
+        "stateId",
+        "semanticRole",
+        "durationInFrames",
+        "springConfig",
+        "depthLayer",
+        "colorToken"
+      ],
+      "properties": {
+        "stateId": {
+          "type": "string",
+          "description": "Unique state node identifier (e.g. STATE_01_HERO_EXPEDITION)"
+        },
+        "semanticRole": {
+          "type": "string",
+          "enum": ["HERO_ACTOR", "TYPOGRAPHY_STREAM", "TELEMETRY_GAUGE", "CONSTELLATION_NODE", "PORTAL_APERTURE", "VOLUMETRIC_ATMOSPHERE"],
+          "description": "Primary dramatic/composition role of this state"
+        },
+        "enterTrigger": {
+          "type": "string",
+          "enum": ["BEAT_DROP", "WORD_SPOKEN", "CAMERA_ARRIVAL", "TRANSITION_START", "MANUAL_FRAME"],
+          "default": "TRANSITION_START",
+          "description": "Event triggering entry into this visual state"
+        },
+        "exitTrigger": {
+          "type": "string",
+          "enum": ["TRANSITION_OUT", "AUDIO_CLIMAX", "TIMED_EXPIRATION", "ENERGY_EXHAUSTION"],
+          "default": "TRANSITION_OUT",
+          "description": "Event initiating departure from this visual state"
+        },
+        "durationInFrames": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Lifespan of this visual state in frames"
+        },
+        "springConfig": {
+          "type": "object",
+          "required": ["mass", "stiffness", "damping"],
+          "properties": {
+            "mass": { "type": "number", "minimum": 0.1, "maximum": 2.0 },
+            "stiffness": { "type": "number", "minimum": 30, "maximum": 300 },
+            "damping": { "type": "number", "minimum": 4, "maximum": 40 },
+            "overshootClamping": { "type": "boolean" }
+          }
+        },
+        "motionPath": {
+          "type": "string",
+          "enum": ["STATIONARY_FLOAT", "HORIZONTAL_GLIDE", "ORBITAL_LODESTAR", "DEEP_Z_PLUNGE", "PARABOLIC_FLING"],
+          "default": "STATIONARY_FLOAT",
+          "description": "Kinetic trajectory followed during this state"
+        },
+        "depthLayer": {
+          "type": "string",
+          "enum": ["BACKGROUND", "DEEP_MIDGROUND", "HERO_PLANE", "FOREGROUND_OVERLAY", "LIGHT_VOLUMETRIC"],
+          "default": "HERO_PLANE",
+          "description": "3D spatial depth assignment adhering to Composition Depth Budget"
+        },
+        "colorToken": {
+          "type": "string",
+          "description": "Active OKLCH or hex color token for this visual state"
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VisualStateTransition"
+          }
+        }
+      }
+    },
+    "VisualStateTransition": {
+      "type": "object",
+      "required": ["targetStateId", "transitionType", "durationInFrames"],
+      "properties": {
+        "targetStateId": {
+          "type": "string",
+          "description": "Destination state ID"
+        },
+        "transitionType": {
+          "type": "string",
+          "enum": ["CAMERA_SPATIAL_FLIGHT", "ELEMENT_KINETIC_DISPERSE", "DEEP_Z_ZOOM_THROUGH", "TOPOLOGICAL_ANCHOR_MORPH", "KINETIC_LIGHT_SWEEP"]
+        },
+        "durationInFrames": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 60
+        }
+      }
+    }
+  }
+}

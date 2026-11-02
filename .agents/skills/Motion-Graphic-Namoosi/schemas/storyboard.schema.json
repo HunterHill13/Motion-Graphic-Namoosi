@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Storyboard",
+  "type": "object",
+  "required": ["shots"],
+  "properties": {
+    "shots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "shot_id",
+          "start_frame",
+          "end_frame",
+          "purpose",
+          "hero_element",
+          "camera",
+          "motion",
+          "composition"
+        ],
+        "properties": {
+          "shot_id": { "type": "string" },
+          "start_frame": { "type": "integer" },
+          "end_frame": { "type": "integer" },
+          "purpose": { "type": "string" },
+          "narration": { "type": "string" },
+          "hero_element": { "type": "string" },
+          "secondary_elements": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "camera": {
+            "type": "object",
+            "required": ["shot_size", "movement"],
+            "properties": {
+              "shot_size": { "type": "string" },
+              "angle": { "type": "string" },
+              "movement": { "type": "string" },
+              "depth": { "type": "string" }
+            }
+          },
+          "composition": { "type": "string" },
+          "motion": {
+            "type": ["string", "object"],
+            "properties": {
+              "verb": {
+                "type": "string",
+                "enum": ["SPLIT", "EXPAND", "TRAVEL", "COLLAPSE", "MORPH", "MERGE", "DEFORM", "REASSEMBLE"]
+              },
+              "trigger": { "type": "string" },
+              "consequence": { "type": "string" },
+              "source_entity_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "target_entity_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "spatial_intent": { "type": "object" }
+            }
+          },
+          "lighting": { "type": "string" },
+          "typography": { "type": "string" },
+          "transition": { "type": "string" },
+          "sound": { "type": "string" },
+          "technical_notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

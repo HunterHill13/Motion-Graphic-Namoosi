@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BeatSheet",
+  "type": "object",
+  "required": ["project", "beats"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": ["title", "fps", "total_duration_frames"],
+      "properties": {
+        "title": { "type": "string" },
+        "fps": { "type": "integer" },
+        "total_duration_frames": { "type": "integer" }
+      }
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "scene",
+          "label",
+          "vo",
+          "visual_goal",
+          "hero",
+          "shot_type",
+          "motion",
+          "text_on_screen"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "scene": { "type": "integer" },
+          "label": { "type": "string" },
+          "vo": {
+            "type": "object",
+            "required": ["text", "start_frame", "end_frame"],
+            "properties": {
+              "text": { "type": "string" },
+              "start_frame": { "type": "integer" },
+              "end_frame": { "type": "integer" }
+            }
+          },
+          "visual_goal": { "type": "string" },
+          "hero": { "type": "string" },
+          "shot_type": { "type": "string" },
+          "camera": { "type": "string" },
+          "motion": { "type": "string" },
+          "text_on_screen": { "type": "string" },
+          "audio": {
+            "type": "object",
+            "properties": {
+              "sfx": { "type": "string" },
+              "music_cue": { "type": "string" }
+            }
+          },
+          "transition": { "type": "string" },
+          "source": { "type": "string" },
+          "status": { "type": "string", "enum": ["draft", "approved", "rendered"] }
+        }
+      }
+    }
+  }
+}

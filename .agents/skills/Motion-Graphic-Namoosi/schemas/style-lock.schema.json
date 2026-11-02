@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StyleLock",
+  "type": "object",
+  "required": [
+    "style_name",
+    "style_image_prompt",
+    "style_video_prompt",
+    "avoid_negative_prompt",
+    "locked_palette",
+    "locked_typography"
+  ],
+  "properties": {
+    "style_name": { "type": "string" },
+    "style_image_prompt": { "type": "string" },
+    "style_video_prompt": { "type": "string" },
+    "avoid_negative_prompt": { "type": "string" },
+    "locked_palette": {
+      "type": "object",
+      "required": ["base", "hero", "accent", "text"],
+      "properties": {
+        "base": { "type": "string" },
+        "hero": { "type": "string" },
+        "accent": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+    "locked_typography": {
+      "type": "object",
+      "required": ["heroFont", "bodyFont"],
+      "properties": {
+        "heroFont": { "type": "string" },
+        "bodyFont": { "type": "string" }
+      }
+    }
+  }
+}

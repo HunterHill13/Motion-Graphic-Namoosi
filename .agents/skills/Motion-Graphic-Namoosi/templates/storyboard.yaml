@@ -1,0 +1,22 @@
+shots:
+  - shot_id: "S01"
+    start_frame: 0
+    end_frame: 180
+    purpose: "Establish subject and prime audience with high-contrast hero"
+    narration: "Every second, a delicate balance keeps healthy tissues intact."
+    hero_element: "Outer cellular membrane model"
+    secondary_elements:
+      - "Receptor glycoproteins"
+      - "Extracellular matrix fibers"
+    camera:
+      shot_size: "Medium Close-up"
+      angle: "15 degree lateral tilt"
+      movement: "Slow push in (scale 1.00 -> 1.05)"
+      depth: "1200px perspective"
+    composition: "Rule of thirds, hero focal point centered at (960, 520)"
+    motion: "Bilayer ripples gently, receptors glide smoothly"
+    lighting: "Cyan rim lighting on hero, deep blue ambient shadows"
+    typography: "Headline caps, tabular numerals, 0.08em letter spacing"
+    transition: "push-through into mitochondrial matrix"
+    sound: "Deep sub bass swell at frame 15, crystal chime at frame 45"
+    technical_notes: "Hold final landing state for 35 frames before transition"

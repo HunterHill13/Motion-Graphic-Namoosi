@@ -1,0 +1,523 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VisualWorld",
+  "description": "Executable semantic contract for Visual World, Art Direction, Depth Model, and Visual Hierarchy in Cinematic Video Production",
+  "type": "object",
+  "required": [
+    "world_id",
+    "title",
+    "hero",
+    "composition",
+    "depth",
+    "art_direction"
+  ],
+  "properties": {
+    "world_id": {
+      "type": "string",
+      "description": "Unique identifier for the persistent visual world"
+    },
+    "title": {
+      "type": "string",
+      "description": "Descriptive title of the visual world"
+    },
+    "hero": {
+      "$ref": "#/definitions/VisualEntityIdentity"
+    },
+    "secondary_entities": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/VisualEntityIdentity" },
+      "default": []
+    },
+    "tertiary_entities": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/VisualEntityIdentity" },
+      "default": []
+    },
+    "environment_entities": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/VisualEntityIdentity" },
+      "default": []
+    },
+    "composition": {
+      "$ref": "#/definitions/CompositionContract"
+    },
+    "depth": {
+      "$ref": "#/definitions/DepthModel"
+    },
+    "art_direction": {
+      "$ref": "#/definitions/ArtDirectionContract"
+    },
+    "materials": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/MaterialReference" },
+      "default": []
+    },
+    "lighting": {
+      "$ref": "#/definitions/LightingContract"
+    },
+    "spatial": {
+      "$ref": "#/definitions/SpatialDepthContract"
+    }
+  },
+  "definitions": {
+    "VisualEntityIdentity": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "semantic_role",
+        "visual_role",
+        "importance",
+        "persistence",
+        "depth_layer",
+        "scale_class",
+        "visual_priority",
+        "semantic_purpose"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "semantic_role": {
+          "type": "string",
+          "enum": ["HERO", "SECONDARY", "TERTIARY", "ENVIRONMENT"]
+        },
+        "visual_role": { "type": "string" },
+        "importance": {
+          "type": "string",
+          "enum": ["PRIMARY", "SECONDARY", "TERTIARY", "ENVIRONMENT"]
+        },
+        "persistence": { "type": "boolean" },
+        "depth_layer": {
+          "type": "string",
+          "enum": ["FOREGROUND", "MIDGROUND", "HERO_PLANE", "BACKGROUND", "DEEP_BACKGROUND"]
+        },
+        "scale_class": {
+          "type": "string",
+          "enum": ["HERO_MONUMENTAL", "FOCAL", "SUPPORTING", "ENVIRONMENTAL", "ACCENT"]
+        },
+        "visual_priority": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "semantic_purpose": { "type": "string" },
+        "color_cue": { "type": "string" },
+        "material_id": { "type": "string" }
+      }
+    },
+    "CompositionContract": {
+      "type": "object",
+      "required": [
+        "composition_intent",
+        "hero_anchor",
+        "safe_region",
+        "focal_region",
+        "visual_balance",
+        "negative_space"
+      ],
+      "properties": {
+        "composition_intent": { "type": "string" },
+        "hero_anchor": {
+          "type": "string",
+          "enum": ["CENTER", "LEFT_THIRD", "RIGHT_THIRD", "TOP", "BOTTOM", "GOLDEN_SPIRAL", "CUSTOM"]
+        },
+        "safe_region": {
+          "type": "object",
+          "required": ["x_min", "x_max", "y_min", "y_max"],
+          "properties": {
+            "x_min": { "type": "number" },
+            "x_max": { "number": "number" },
+            "y_min": { "type": "number" },
+            "y_max": { "type": "number" }
+          }
+        },
+        "focal_region": {
+          "type": "string",
+          "enum": ["CENTRAL", "UPPER_THIRD", "LOWER_THIRD", "SPLIT_BILATERAL", "RADIAL_CONCENTRIC"]
+        },
+        "visual_balance": {
+          "type": "string",
+          "enum": ["RADIAL", "ASYMMETRICAL", "BILATERAL", "DYNAMIC_TRIANGULAR"]
+        },
+        "negative_space": {
+          "type": "string",
+          "enum": ["HIGH", "BALANCED", "MINIMAL"]
+        },
+        "aspect_ratio": { "type": "string", "default": "16:9" }
+      }
+    },
+    "DepthModel": {
+      "type": "object",
+      "required": ["depth_layers", "depth_order", "relative_depth"],
+      "properties": {
+        "depth_layers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["FOREGROUND", "MIDGROUND", "HERO_PLANE", "BACKGROUND", "DEEP_BACKGROUND"]
+          }
+        },
+        "depth_order": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "relative_depth": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "parallax_intent": {
+          "type": "string",
+          "enum": ["STRONG", "SUBTLE", "STATIC", "ISOMETRIC"],
+          "default": "SUBTLE"
+        },
+        "is_explicit_flat_composition": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "ArtDirectionContract": {
+      "type": "object",
+      "required": [
+        "visual_style",
+        "visual_density",
+        "contrast_profile",
+        "depth_profile",
+        "motion_character",
+        "visual_hierarchy",
+        "composition_intent",
+        "atmosphere_intent",
+        "color_language"
+      ],
+      "properties": {
+        "visual_style": { "type": "string" },
+        "visual_density": {
+          "type": "string",
+          "enum": ["MINIMAL", "MEDIUM", "MEDIUM_HIGH", "HIGH"]
+        },
+        "contrast_profile": { "type": "string" },
+        "depth_profile": { "type": "string" },
+        "motion_character": { "type": "string" },
+        "visual_hierarchy": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["PRIMARY", "SECONDARY", "TERTIARY", "ENVIRONMENT"]
+          }
+        },
+        "composition_intent": { "type": "string" },
+        "atmosphere_intent": { "type": "string" },
+        "color_language": {
+          "type": "object",
+          "required": ["primary_hue", "secondary_hue", "dominant_tone", "background_hex"],
+          "properties": {
+            "primary_hue": { "type": "string" },
+            "secondary_hue": { "type": "string" },
+            "accent_hue": { "type": "string" },
+            "dominant_tone": {
+              "type": "string",
+              "enum": ["DARK_CINEMATIC", "LIGHT_CLINICAL", "MONOCHROME_TECHNICAL", "HIGH_CONTRAST"]
+            },
+            "background_hex": { "type": "string" }
+          }
+        }
+      }
+    },
+    "MaterialReference": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "category",
+        "surface_response",
+        "edge_response",
+        "deformation_response",
+        "light_response",
+        "emission",
+        "opacity_behavior",
+        "texture_character",
+        "motion_responses"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["PLASMA", "METAL", "ORGANIC", "GLASS", "ENERGY", "SMOKE", "LIQUID", "STONE", "CELESTIAL", "FLAT_GRAPHIC"]
+        },
+        "surface_response": {
+          "type": "string",
+          "enum": ["SOFT", "RIGID", "GLOSSY", "MATTE", "WET", "TRANSLUCENT", "REFLECTIVE", "DIFFUSE"]
+        },
+        "edge_response": {
+          "type": "string",
+          "enum": ["STABLE", "SOFT", "GLOWING", "FLUID", "FRACTURED", "TRANSLUCENT", "UNSTABLE"]
+        },
+        "deformation_response": {
+          "type": "string",
+          "enum": ["RIGID", "ELASTIC", "VISCOELASTIC", "FLUID", "BRITTLE", "SOFT_BODY", "PARTICULATE"]
+        },
+        "light_response": {
+          "type": "string",
+          "enum": ["DIFFUSE", "SPECULAR", "SUBSURFACE", "EMISSIVE", "REFRACTIVE", "ABSORPTIVE"]
+        },
+        "emission": {
+          "type": "string",
+          "enum": ["NON_EMISSIVE", "WEAKLY_EMISSIVE", "EMISSIVE", "HIGHLY_EMISSIVE"]
+        },
+        "opacity_behavior": {
+          "type": "string",
+          "enum": ["OPAQUE", "TRANSLUCENT", "FADING", "DENSITY_DRIVEN", "VOLUME_DRIVEN"]
+        },
+        "texture_character": {
+          "type": "string",
+          "enum": ["SMOOTH", "MICROTEXTURED", "GRAINED", "FLUID", "STRIATED", "POROUS", "FIBROUS"]
+        },
+        "motion_responses": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["verb", "description"],
+            "properties": {
+              "verb": {
+                "type": "string",
+                "enum": ["SPLIT", "EXPAND", "TRAVEL", "COLLAPSE", "MORPH", "MERGE", "DEFORM", "REASSEMBLE"]
+              },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "LightingContract": {
+      "type": "object",
+      "required": ["id", "sources", "ambient_profile", "material_interactions", "motion_responses"],
+      "properties": {
+        "id": { "type": "string" },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/LightSourceReference" }
+        },
+        "ambient_profile": {
+          "type": "object",
+          "required": ["level", "value", "color"],
+          "properties": {
+            "level": { "type": "string", "enum": ["VERY_LOW", "LOW", "MEDIUM", "HIGH", "VERY_HIGH"] },
+            "value": { "type": "number", "minimum": 0, "maximum": 1 },
+            "color": { "$ref": "#/definitions/LightColor" },
+            "description": { "type": "string" }
+          }
+        },
+        "material_interactions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/MaterialLightInteraction" }
+        },
+        "motion_responses": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/MotionLightingResponse" }
+        },
+        "is_flat_graphic_override": { "type": "boolean" }
+      }
+    },
+    "LightSourceReference": {
+      "type": "object",
+      "required": ["id", "type", "direction", "intensity", "color", "softness"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["KEY", "FILL", "RIM", "AMBIENT", "EMISSIVE", "ENVIRONMENT", "PRACTICAL"]
+        },
+        "direction": {
+          "type": "object",
+          "required": ["semantic"],
+          "properties": {
+            "semantic": {
+              "type": "string",
+              "enum": ["UPPER_LEFT", "UPPER_RIGHT", "LOWER_LEFT", "LOWER_RIGHT", "LEFT", "RIGHT", "TOP", "BOTTOM", "FRONT", "BACK", "CUSTOM"]
+            }
+          }
+        },
+        "intensity": {
+          "type": "object",
+          "required": ["level", "value"],
+          "properties": {
+            "level": { "type": "string", "enum": ["VERY_LOW", "LOW", "MEDIUM", "HIGH", "VERY_HIGH"] },
+            "value": { "type": "number", "minimum": 0, "maximum": 2.5 }
+          }
+        },
+        "color": { "$ref": "#/definitions/LightColor" },
+        "softness": {
+          "type": "string",
+          "enum": ["HARD", "MEDIUM", "SOFT", "VERY_SOFT"]
+        },
+        "target_entity_id": { "type": "string" },
+        "emissive_source_entity_id": { "type": "string" }
+      }
+    },
+    "LightColor": {
+      "type": "object",
+      "required": ["semantic"],
+      "properties": {
+        "semantic": {
+          "type": "string",
+          "enum": ["NEUTRAL", "WARM", "COOL", "CYAN", "BLUE", "MAGENTA", "RED", "AMBER", "GREEN", "CUSTOM"]
+        },
+        "hex": { "type": "string" }
+      }
+    },
+    "MaterialLightInteraction": {
+      "type": "object",
+      "required": ["id", "entity_id", "material_id", "light_source_id", "highlight_character", "shadow_character", "rim_character", "description"],
+      "properties": {
+        "id": { "type": "string" },
+        "entity_id": { "type": "string" },
+        "material_id": { "type": "string" },
+        "light_source_id": { "type": "string" },
+        "highlight_character": {
+          "type": "string",
+          "enum": ["SHARP_SPECULAR", "SOFT_DIFFUSE", "TRANSMITTED_SPECULAR", "GLAZING_FRESNEL", "NONE"]
+        },
+        "shadow_character": {
+          "type": "string",
+          "enum": ["HARD_TERMINATOR", "SOFT_GRADIENT", "DIFFUSE_WRAPPING", "MINIMAL_SHADOW", "NONE"]
+        },
+        "rim_character": {
+          "type": "string",
+          "enum": ["RAZOR_RIM", "SOFT_HALO", "SUBSURFACE_GLOW", "FRESNEL_GRAZING", "NONE"]
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "MotionLightingResponse": {
+      "type": "object",
+      "required": ["verb", "entity_id", "light_source_id", "description"],
+      "properties": {
+        "verb": {
+          "type": "string",
+          "enum": ["SPLIT", "EXPAND", "TRAVEL", "COLLAPSE", "MORPH", "MERGE", "DEFORM", "REASSEMBLE"]
+        },
+        "entity_id": { "type": "string" },
+        "light_source_id": { "type": "string" },
+        "highlight_displacement": { "type": "string" },
+        "trailing_response": { "type": "string" },
+        "intensity_modulation": { "type": "string" },
+        "shadow_displacement": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "SpatialDepthContract": {
+      "type": "object",
+      "required": ["id", "composition_intent", "placements", "relationships", "occlusions", "parallax_profile", "motion_responses"],
+      "properties": {
+        "id": { "type": "string" },
+        "composition_intent": {
+          "type": "string",
+          "enum": ["HERO_DOMINANT", "DEPTH_CORRIDOR", "LAYERED_WORLD", "CENTERED_STAGE", "DIAGONAL_DEPTH", "ORBITAL_COMPOSITION", "ENVIRONMENTAL_IMMERSION", "FLAT_SCHEMATIC"]
+        },
+        "placements": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/EntitySpatialPlacement" }
+        },
+        "relationships": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/SpatialRelationship" }
+        },
+        "occlusions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/OcclusionIntent" }
+        },
+        "parallax_profile": {
+          "type": "object",
+          "required": ["sensitivity", "response", "depth_factor"],
+          "properties": {
+            "sensitivity": { "type": "string", "enum": ["STRONG", "BALANCED", "SUBTLE", "STATIC"] },
+            "response": { "type": "string", "enum": ["LINEAR", "SUBTLE", "STRONG"] },
+            "depth_factor": { "type": "number", "minimum": 0, "maximum": 1 },
+            "description": { "type": "string" }
+          }
+        },
+        "motion_responses": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/SpatialMotionResponse" }
+        },
+        "is_flat_graphic_override": { "type": "boolean" }
+      }
+    },
+    "EntitySpatialPlacement": {
+      "type": "object",
+      "required": ["entity_id", "depth_band", "transform", "semantic_spatial_role"],
+      "properties": {
+        "entity_id": { "type": "string" },
+        "depth_band": {
+          "type": "string",
+          "enum": ["FOREGROUND", "MIDGROUND", "HERO_PLANE", "BACKGROUND", "DEEP_BACKGROUND"]
+        },
+        "transform": {
+          "type": "object",
+          "required": ["x", "y", "z", "scale"],
+          "properties": {
+            "x": { "type": "number", "minimum": -1.5, "maximum": 1.5 },
+            "y": { "type": "number", "minimum": -1.5, "maximum": 1.5 },
+            "z": { "type": "number", "minimum": 0, "maximum": 1 },
+            "scale": { "type": "number", "minimum": 0.05, "maximum": 5 },
+            "rotation_x": { "type": "number" },
+            "rotation_y": { "type": "number" },
+            "rotation_z": { "type": "number" }
+          }
+        },
+        "apparent_scale": { "type": "number" },
+        "semantic_spatial_role": { "type": "string" }
+      }
+    },
+    "SpatialRelationship": {
+      "type": "object",
+      "required": ["id", "source_entity_id", "relation", "target_entity_id"],
+      "properties": {
+        "id": { "type": "string" },
+        "source_entity_id": { "type": "string" },
+        "relation": {
+          "type": "string",
+          "enum": ["IN_FRONT_OF", "BEHIND", "BESIDE", "ABOVE", "BELOW", "SURROUNDS", "INTERSECTS", "CONTAINS", "ORBITAL_AROUND", "CONNECTED_TO"]
+        },
+        "target_entity_id": { "type": "string" },
+        "depth_delta": { "type": "number" },
+        "description": { "type": "string" }
+      }
+    },
+    "OcclusionIntent": {
+      "type": "object",
+      "required": ["id", "occluding_entity_id", "occluded_entity_id", "type", "depth_difference"],
+      "properties": {
+        "id": { "type": "string" },
+        "occluding_entity_id": { "type": "string" },
+        "occluded_entity_id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["FULL", "PARTIAL", "TRANSLUCENT_VEILING", "FRAMING", "NONE"]
+        },
+        "depth_difference": { "type": "number" },
+        "description": { "type": "string" }
+      }
+    },
+    "SpatialMotionResponse": {
+      "type": "object",
+      "required": ["verb", "entity_id", "trajectory", "start_z", "end_z", "description"],
+      "properties": {
+        "verb": {
+          "type": "string",
+          "enum": ["SPLIT", "EXPAND", "TRAVEL", "COLLAPSE", "MORPH", "MERGE", "DEFORM", "REASSEMBLE"]
+        },
+        "entity_id": { "type": "string" },
+        "trajectory": {
+          "type": "string",
+          "enum": ["TOWARD_VIEWER", "AWAY_FROM_VIEWER", "PLANAR_XY", "MULTI_DEPTH_CONVERGENCE", "VOLUMETRIC_RADIAL"]
+        },
+        "start_z": { "type": "number", "minimum": 0, "maximum": 1 },
+        "end_z": { "type": "number", "minimum": 0, "maximum": 1 },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

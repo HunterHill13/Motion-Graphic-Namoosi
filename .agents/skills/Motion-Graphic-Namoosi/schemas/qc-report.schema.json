@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QCReport",
+  "type": "object",
+  "required": [
+    "stage",
+    "timestamp",
+    "quantitative_metrics",
+    "visual_checks",
+    "factual_integrity",
+    "status"
+  ],
+  "properties": {
+    "stage": { "type": "string", "enum": ["pilot", "full_v1", "full_v2", "final"] },
+    "timestamp": { "type": "string" },
+    "quantitative_metrics": {
+      "type": "object",
+      "required": ["max_still_duration_seconds", "min_hold_frames", "timeline_gaps"],
+      "properties": {
+        "max_still_duration_seconds": { "type": "number", "maximum": 3.0 },
+        "min_hold_frames": { "type": "integer", "minimum": 30 },
+        "timeline_gaps": { "type": "integer", "maximum": 0 },
+        "hero_bounding_height_median": { "type": "number", "minimum": 170 }
+      }
+    },
+    "visual_checks": {
+      "type": "object",
+      "required": ["zero_linear_easing", "safe_zones_respected", "five_layer_stack_present"],
+      "properties": {
+        "zero_linear_easing": { "type": "boolean" },
+        "safe_zones_respected": { "type": "boolean" },
+        "five_layer_stack_present": { "type": "boolean" },
+        "hero_focal_point_clear": { "type": "boolean" }
+      }
+    },
+    "factual_integrity": {
+      "type": "object",
+      "required": ["unverified_claims_count"],
+      "properties": {
+        "unverified_claims_count": { "type": "integer", "maximum": 0 },
+        "flagged_terms": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "status": { "type": "string", "enum": ["PASSED", "REVISION_REQUIRED"] },
+    "action_items": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
