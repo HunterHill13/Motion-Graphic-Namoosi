@@ -34,7 +34,8 @@ renders/*
 assets/fonts/
 assets/hdri/
 assets/textures/
-.agents/skills/cinematic-motion-director/assets/previews/
+.agents/skills/cinematic-motion-director/
+.agents/skills/Motion-Graphic-Namoosi/assets/previews/
 
 # OS / Editor
 .DS_Store
