@@ -13,7 +13,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 0.95$, mass=0.6, stiffness=90, damping=14 (Polished glide).
 - **Default Camera:** `DIAGONAL_CASCADE` (45° cascade with banking roll $\pm 3.5^\circ$) or `PANORAMIC_HORIZONTAL`.
 - **Best Suited Topics:** AI agents, developer tooling, cloud infrastructure, hardware launches, tech keynotes.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/DARK_GRAPHITE_TECH_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/DARK_GRAPHITE_TECH_MASTER.mp4)
 
 ---
 
@@ -26,7 +26,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 0.98$, mass=0.55, stiffness=120, damping=16 (Viscous fluid morph).
 - **Default Camera:** `PANORAMIC_HORIZONTAL` or stationary stage with topological anchoring.
 - **Best Suited Topics:** SaaS workflows, UI design systems, digital products, automation features.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/CONTINUOUS_UI_MORPH_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/CONTINUOUS_UI_MORPH_MASTER.mp4)
 
 ---
 
@@ -39,7 +39,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 0.64$, mass=0.65, stiffness=75, damping=9 (Underdamped buoyant resonance).
 - **Default Camera:** `DEEP_Z_TUNNEL` (3D forward push-in through apertures into deep space).
 - **Best Suited Topics:** Biotechnology, medicine, pharmaceuticals, genetics, quantum computing, ecology.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/QUANTUM_BIO_DEEP_Z_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/QUANTUM_BIO_DEEP_Z_MASTER.mp4)
 
 ---
 
@@ -52,7 +52,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 0.80$, mass=0.9, stiffness=140, damping=18, `overshootClamping: true` (Heavy dead-stop).
 - **Default Camera:** `VERTICAL_ELEVATOR` (Towering vertical crane tracking).
 - **Best Suited Topics:** Brand manifestos, mission statements, visionary speeches, architecture, engineering.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/KINETIC_ARCHITECTURAL_TYPO_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/KINETIC_ARCHITECTURAL_TYPO_MASTER.mp4)
 
 ---
 
@@ -65,7 +65,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 0.93$, mass=0.5, stiffness=130, damping=15 (Crisp tile snap).
 - **Default Camera:** `PANORAMIC_HORIZONTAL` or `DYNAMIC_COMPOSITE`.
 - **Best Suited Topics:** Software features, enterprise platforms, dashboard overviews, multi-tool suites.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/BENTO_GRID_SAAS_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/BENTO_GRID_SAAS_MASTER.mp4)
 
 ---
 
@@ -78,7 +78,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 0.74$, mass=0.45, stiffness=170, damping=13 (High-frequency tick response).
 - **Default Camera:** `PANORAMIC_HORIZONTAL` with horizontal tracking along data conduits.
 - **Best Suited Topics:** Finance, trading algorithms, economics, crypto/blockchain, market analytics.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/FINTECH_TRADING_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/FINTECH_TRADING_MASTER.mp4)
 
 ---
 
@@ -91,7 +91,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 1.08$, mass=0.8, stiffness=210, damping=28, `overshootClamping: true` (Tactile overdamped fold).
 - **Default Camera:** Subtle table tilt, stationary camera with stepped origami unrolling.
 - **Best Suited Topics:** Creative storytelling, education, history, children's content, artisan crafts.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/STOP_MOTION_PAPER_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/STOP_MOTION_PAPER_MASTER.mp4)
 
 ---
 
@@ -104,7 +104,7 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 1.23$, mass=0.5, stiffness=160, damping=22, `overshootClamping: true` (Dead-stop mechanical snap).
 - **Default Camera:** `PANORAMIC_HORIZONTAL` with technical orthographic panning.
 - **Best Suited Topics:** Engineering, aerospace, mechanical architecture, specifications, technical audits.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/TECHNICAL_BLUEPRINT_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/TECHNICAL_BLUEPRINT_MASTER.mp4)
 
 ---
 
@@ -118,4 +118,4 @@ This reference provides the visual identities, color DNA, material languages, an
 - **Spring Profile:** $\zeta = 0.50$, mass=0.75, stiffness=190, damping=12 (High-voltage punch; clamped for typography).
 - **Default Camera:** Dynamic punchy snaps, stationary stage with elastic scale slams.
 - **Best Suited Topics:** Youth culture, disruptive startups, gaming, bold opinion pieces, marketing campaigns.
-- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Cinematic-Motion-Graphics-Agent-Skill-Plan/main/renders/claude/NEO_BRUTALIST_MASTER.mp4)
+- **Preview Link:** [مشاهده پیش‌نمایش](https://raw.githubusercontent.com/HunterHill13/Motion-Graphic-Namoosi/main/renders/claude/NEO_BRUTALIST_MASTER.mp4)
